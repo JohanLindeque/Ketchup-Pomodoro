@@ -1,33 +1,73 @@
-# Pomodoro timer cli
+# 🍅 Ketchup Pomodoro
+A lightweight Pomodoro timer that runs in your terminal, built with C# and Spectre.Console.
 
-## Idea
-I am building a Pomodoro cli tool to help me focus and get work done and finish tasks quicker.
-The main idea is to be able to create custom pomodoro splits, or use a quick start (default 25 min focus 5min break) that will run in terminal with a progress bar in order to visually see your progress. 
 
-## Basic flow
-* Menu with options:
- [] Quick Start: run default pomodoro split (default 25 min focus 5min break) for 1 session (a session is a focus + break).
-  - After session complete prompt: Continue or quit
-  - quit to main menu and continue will run for another session
- [] Add custom pomodoro : able to create custom split and name it
-  - custom splits will show in main menu along with default options
-  
- [] q or ctrl + c to quit app.
- 
-## Additional features
-- progress bar with count down timer.
-- random colour progress bars.
-- track a goal for session
-- pause/resume/quit session
-- track tasks to complete
-- track amount of sessions completed
-- cool animation/ screen when session complete
-- add/remove/modify custom Pomodoro splits
+## Features
+Quick start presets — jump straight into a 25m/5m or 50m/10m split from the menu
+Custom intervals — pick any work and rest duration from a list
+Goal tracking — set a focus goal displayed throughout the session
+Live countdown — animated progress bar with time remaining updated every second
+Session rounds — prompted to continue or quit after each work/rest cycle
 
-----
-## Questions 
-1. how does pomodoro work?
-2. how can i store and persist custom pomodoro splits?
-3. how can i run the app using its name, for example like you call 'cat' or 'curl' to run them?
 
- 
+---
+## Installation
+### Prerequisites
+
+.NET 10 runtime/SDK or later
+
+### Clone and run
+
+```bash
+git clone https://github.com/your-username/ketchup-pomodoro.git
+cd ketchup-pomodoro
+dotnet run
+```
+
+### Build a release binary
+```bash
+dotnet publish -c Release -r win-x64 --self-contained
+```
+
+Replace win-x64 with linux-x64 or osx-x64 as needed.
+
+---
+## Usage
+Run the app and follow the prompts:
+```bash
+dotnet run
+```
+
+At the main menu, choose a mode:
+``` bash
+Choose your Pomodoro:
+> Quick Start: 25m/5m
+  Quick Start: 50m/10m
+  Custom Split
+  EXIT
+```
+• Quick Start: 25m/5m — classic Pomodoro, no configuration needed
+• Quick Start: 50m/10m — extended focus session, no configuration needed
+• Custom Split — choose your own work and rest intervals from a list, then set your goal
+
+For all modes you will be prompted for a goal before the timer starts (defaults to Get Stuff Done!).
+Once started, the timer displays:
+```
+┌─ Goal ────────────┐
+│ Get Stuff Done!   │
+└───────────────────┘
+
+Doing some work...
+⠋ Time Left: 00:45  ████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░   18%
+
+```
+After each full work + rest cycle you will be prompted to continue or quit.
+
+Built With
+
+C# / .NET 10
+Spectre.Console
+
+
+License
+MIT

@@ -8,4 +8,13 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\" />
+    <Folder Include="Services\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Spectre.Console" Version="0.55.2" />
+  </ItemGroup>
+
 </Project>
