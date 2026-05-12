@@ -30,6 +30,11 @@ dotnet publish -c Release -r win-x64 --self-contained
 
 Replace win-x64 with linux-x64 or osx-x64 as needed.
 
+Or create a single **exe** file:
+```bash
+dotnet publish -c Release -r win-x64 --self-contained -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true
+```
+
 ---
 ## Usage
 Run the app and follow the prompts:
