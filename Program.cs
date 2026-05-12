@@ -32,7 +32,7 @@ internal class Program
                         "What's your [Gold1]Goal[/]?",
                         "Get Stuff Done!"
                     );
-                    pomodoro.CreatePomodoro(25, 5, goal).Wait();
+                    await pomodoro.CreatePomodoro(25, 5, goal);
                     break;
                 case "Quick Start: 50m/10m":
                     Console.Clear();
@@ -40,7 +40,7 @@ internal class Program
                         "What's your [Gold1]Goal[/]?",
                         "Get Stuff Done!"
                     );
-                    pomodoro.CreatePomodoro(25, 5, goal).Wait();
+                    await pomodoro.CreatePomodoro(50, 10, goal);
                     break;
 
                 case "Custom Split":
@@ -62,7 +62,7 @@ internal class Program
                             .AddChoices(1, 2, 5, 10, 15, 25, 30, 40, 50)
                     );
 
-                    pomodoro.CreatePomodoro(workInterval, restInterval, goal).Wait();
+                    await pomodoro.CreatePomodoro(workInterval, restInterval, goal);
                     break;
 
                 case "EXIT":
