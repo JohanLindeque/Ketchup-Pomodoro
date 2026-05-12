@@ -69,60 +69,23 @@ public class PomodoroTimerService
                     await Task.Delay(1000);
                 }
             });
-        // Console.Clear();
-
-        // AnsiConsole.Write(
-        //     new Panel($"[yellow]{goal}[/]").Header(" Goal ").Border(BoxBorder.Rounded)
-        // );
-
-        // AnsiConsole.MarkupLine($"\n[{color}]{caption}[/]");
-
-        // var timeLeft = duration;
-
-        // await AnsiConsole
-        //     .Progress()
-        //     .AutoClear(false)
-        //     .HideCompleted(false)
-        //     .Columns(
-        //         new SpinnerColumn(Spinner.Known.Dots),
-        //         new TaskDescriptionColumn(),
-        //         new ProgressBarColumn()
-        //         {
-        //             CompletedStyle = new Style(
-        //                 foreground: Color.Green,
-        //                 decoration: Decoration.Bold
-        //             ),
-        //             FinishedStyle = new Style(foreground: Color.Gold1),
-        //             RemainingStyle = new Style(foreground: Color.Grey23),
-        //         },
-        //         new PercentageColumn()
-        //     )
-        //     .StartAsync(async ctx =>
-        //     {
-        //         var task = ctx.AddTask(
-        //             $"[{color}]Time Left: {timeLeft:mm\\:ss}[/]",
-        //             maxValue: duration.TotalSeconds
-        //         );
-
-        //         while (!ctx.IsFinished)
-        //         {
-        //             timeLeft -= TimeSpan.FromSeconds(1);
-        //             task.Description = $"[{color}]Time Left: {timeLeft:mm\\:ss}[/]";
-        //             task.Increment(1);
-        //             await Task.Delay(1000);
-        //         }
-        //     });
     }
 
     private static bool ContinueSession()
     {
         Console.Clear();
 
-        AnsiConsole.MarkupLine("[green]Completed![/]");
+        AnsiConsole.MarkupLine(
+            @"[MediumTurquoise]
+            ░█▀▀░█▀█░█▄█░█▀█░█░░░█▀▀░▀█▀░█▀▀░█▀▄░█
+            ░█░░░█░█░█░█░█▀▀░█░░░█▀▀░░█░░█▀▀░█░█░▀
+            ░▀▀▀░▀▀▀░▀░▀░▀░░░▀▀▀░▀▀▀░░▀░░▀▀▀░▀▀░░▀
+        [/]"
+        );
 
         var userInput = AnsiConsole.Prompt(
             new SelectionPrompt<string>()
-                .Title("Do you want to continue?")
+                .Title("[Plum3]Do you want to continue?[/]")
                 .AddChoices("Continue", "Quit")
         );
 

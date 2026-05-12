@@ -7,6 +7,7 @@ internal class Program
     {
         var quitApp = false;
         var pomodoro = new PomodoroTimerService();
+        var goal = string.Empty;
 
         while (!quitApp)
         {
@@ -27,16 +28,41 @@ internal class Program
             {
                 case "Quick Start: 25m/5m":
                     Console.Clear();
-                    pomodoro.CreatePomodoro(25, 5).Wait();
+                    goal = AnsiConsole.Ask<string>(
+                        "What's your [Gold1]Goal[/]?",
+                        "Get Stuff Done!"
+                    );
+                    pomodoro.CreatePomodoro(25, 5, goal).Wait();
                     break;
                 case "Quick Start: 50m/10m":
                     Console.Clear();
-                    pomodoro.CreatePomodoro(25, 5).Wait();
+                    goal = AnsiConsole.Ask<string>(
+                        "What's your [Gold1]Goal[/]?",
+                        "Get Stuff Done!"
+                    );
+                    pomodoro.CreatePomodoro(25, 5, goal).Wait();
                     break;
 
                 case "Custom Split":
                     Console.Clear();
-                    pomodoro.CreatePomodoro(1, 1).Wait();
+                    goal = AnsiConsole.Ask<string>(
+                        "What's your [Gold1]Goal[/]?",
+                        "Get Stuff Done!"
+                    );
+
+                    var workInterval = AnsiConsole.Prompt(
+                        new SelectionPrompt<int>()
+                            .Title("[DeepSkyBlue1]Choose your Work Interval(minutes):[/]")
+                            .AddChoices(1, 2, 5, 10, 15, 25, 30, 40, 50)
+                    );
+
+                    var restInterval = AnsiConsole.Prompt(
+                        new SelectionPrompt<int>()
+                            .Title("[MediumPurple]Choose your Rest Interval(minutes):[/]")
+                            .AddChoices(1, 2, 5, 10, 15, 25, 30, 40, 50)
+                    );
+
+                    pomodoro.CreatePomodoro(workInterval, restInterval, goal).Wait();
                     break;
 
                 case "EXIT":
