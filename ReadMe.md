@@ -3,12 +3,11 @@ A lightweight Pomodoro timer that runs in your terminal, built with C# and Spect
 
 
 ## Features
-Quick start presets — jump straight into a 25m/5m or 50m/10m split from the menu
-Custom intervals — pick any work and rest duration from a list
-Goal tracking — set a focus goal displayed throughout the session
-Live countdown — animated progress bar with time remaining updated every second
-Session rounds — prompted to continue or quit after each work/rest cycle
-
+• Quick start presets — jump straight into a 25m/5m or 50m/10m split from the menu
+• Custom intervals — pick any work and rest duration from a list
+• Goal tracking — set a focus goal displayed throughout the session
+• Live countdown — animated progress bar with time remaining updated every second
+• Session rounds — prompted to continue or quit after each work/rest cycle
 
 ---
 ## Installation
