@@ -1,4 +1,5 @@
 ﻿using Ketchup_Pomodoro.Services;
+using Spectre.Console;
 
 internal class Program
 {
@@ -9,27 +10,36 @@ internal class Program
 
         while (!quitApp)
         {
-            DrawMainMenu();
+            HandleDrawArt.DrawLogo();
 
-            var userInput = Console.ReadLine();
+            var userInput = AnsiConsole.Prompt(
+                new SelectionPrompt<string>()
+                    .Title("Choose your Pomodoro:")
+                    .AddChoices(
+                        "Quick Start: 25m/5m",
+                        "Quick Start: 50m/10m",
+                        "Custom Split",
+                        "EXIT"
+                    )
+            );
 
             switch (userInput)
             {
-                case "1":
+                case "Quick Start: 25m/5m":
                     Console.Clear();
-                    // Console.WriteLine("Ready to start 25/5 split?");
-                    // Thread.Sleep(2000);
-                    pomodoro.CreatePomodoro(25,5).Wait();
+                    pomodoro.CreatePomodoro(25, 5).Wait();
+                    break;
+                case "Quick Start: 50m/10m":
+                    Console.Clear();
+                    pomodoro.CreatePomodoro(25, 5).Wait();
                     break;
 
-                case "2":
+                case "Custom Split":
                     Console.Clear();
-                    // Console.WriteLine("Ready to start 50/10 split?");
-                    // Thread.Sleep(5000);
-                    pomodoro.CreatePomodoro(50,10).Wait();
+                    pomodoro.CreatePomodoro(1, 1).Wait();
                     break;
 
-                case "q":
+                case "EXIT":
                     Console.Clear();
                     Console.WriteLine("Bye bye");
                     quitApp = true;
@@ -39,20 +49,5 @@ internal class Program
                     break;
             }
         }
-    }
-
-    private static void DrawMainMenu()
-    {
-        Console.Clear();
-
-        Console.ForegroundColor = ConsoleColor.Red;
-        Console.WriteLine("Welcome to Ketchup-Pomodoro");
-        Console.ForegroundColor = ConsoleColor.Cyan;
-        Console.WriteLine("Choose your Pomodoro");
-        Console.WriteLine("1. 25/5");
-        Console.WriteLine("2. 50/10");
-        Console.WriteLine("q. quit");
-        Console.WriteLine("----------------------------");
-        Console.ResetColor();
     }
 }

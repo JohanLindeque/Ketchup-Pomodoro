@@ -1,6 +1,6 @@
 using System;
-using System.ComponentModel.DataAnnotations;
 using Ketchup_Pomodoro.Models;
+using Spectre.Console;
 
 namespace Ketchup_Pomodoro.Services;
 
@@ -8,49 +8,124 @@ public class PomodoroTimerService
 {
     private Session _session;
 
-    public async Task CreatePomodoro(int work, int rest)
+    public async Task CreatePomodoro(
+        int workInterval,
+        int restInterval,
+        string goal = "Get Stuff Done!"
+    )
     {
-        _session = new Session("Do work", work, rest, Session.SessionType.work);
+        _session = new Session(goal, workInterval, restInterval, Session.SessionType.work);
 
-        var timeLeft = _session.WorkDuration;
+        var continueSession = true;
 
-        while (timeLeft > TimeSpan.Zero)
+        while (continueSession)
         {
-            Console.Clear();
-            Console.WriteLine(_session.WorkCaption);
-            Console.Write($"\rTime left: {timeLeft.ToString(@"mm\:ss")}   ");
-            await Task.Delay(1000);
+            await RunTimer(_session.WorkDuration, _session.WorkCaption, goal, Color.DeepSkyBlue1);
 
-            timeLeft = timeLeft.Subtract(TimeSpan.FromSeconds(1));
-        }
+            _session.Active = Session.SessionType.rest;
 
-        _session.Active = Session.SessionType.rest;
-        timeLeft = _session.RestDuration;
+            await RunTimer(_session.RestDuration, _session.RestCaption, goal, Color.MediumPurple);
 
-        while (timeLeft > TimeSpan.Zero)
-        {
-            Console.Clear();
-
-            Console.WriteLine(_session.RestCaption);
-            Console.Write($"\rTime left: {timeLeft.ToString(@"mm\:ss")}   ");
-            await Task.Delay(1000);
-
-            timeLeft = timeLeft.Subtract(TimeSpan.FromSeconds(1));
+            continueSession = ContinueSession();
         }
     }
 
-    private static void DrawSessionMenu()
+    private async Task RunTimer(TimeSpan duration, string caption, string goal, Color color)
     {
         Console.Clear();
-        Console.ForegroundColor = ConsoleColor.DarkYellow;
 
-        Console.WriteLine("Completed!");
+        AnsiConsole.Write(
+            new Panel($"[yellow]{goal}[/]").Header(" Goal ").Border(BoxBorder.Rounded)
+        );
 
-        Console.ForegroundColor = ConsoleColor.Cyan;
-        Console.WriteLine("Do you want to continue?");
-        Console.WriteLine("c. Continue");
-        Console.WriteLine("q. quit");
-        Console.WriteLine("----------------------------");
-        Console.ResetColor();
+        AnsiConsole.MarkupLine($"\n[{color}]{caption}[/]");
+
+        var timeLeft = duration;
+
+        await AnsiConsole
+            .Progress()
+            .AutoClear(false)
+            .HideCompleted(false)
+            .Columns(
+                new SpinnerColumn(Spinner.Known.Dots),
+                new TaskDescriptionColumn(),
+                new PercentageColumn()
+            )
+            .StartAsync(async ctx =>
+            {
+                var task = ctx.AddTask(
+                    $"[{color}]Time Left: {timeLeft:mm\\:ss}[/]",
+                    maxValue: duration.TotalSeconds
+                );
+
+                while (!ctx.IsFinished)
+                {
+                    timeLeft -= TimeSpan.FromSeconds(1);
+                    var pct = 1.0 - (timeLeft.TotalSeconds / duration.TotalSeconds);
+                    var filled = (int)(pct * 40);
+                    var bar = $"[{Color.Green}]{"".PadLeft(filled, '█').PadRight(40, '░')}[/]";
+                    task.Description = $"[{color}]Time Left: {timeLeft:mm\\:ss}[/] {bar}";
+                    task.Increment(1);
+                    await Task.Delay(1000);
+                }
+            });
+        // Console.Clear();
+
+        // AnsiConsole.Write(
+        //     new Panel($"[yellow]{goal}[/]").Header(" Goal ").Border(BoxBorder.Rounded)
+        // );
+
+        // AnsiConsole.MarkupLine($"\n[{color}]{caption}[/]");
+
+        // var timeLeft = duration;
+
+        // await AnsiConsole
+        //     .Progress()
+        //     .AutoClear(false)
+        //     .HideCompleted(false)
+        //     .Columns(
+        //         new SpinnerColumn(Spinner.Known.Dots),
+        //         new TaskDescriptionColumn(),
+        //         new ProgressBarColumn()
+        //         {
+        //             CompletedStyle = new Style(
+        //                 foreground: Color.Green,
+        //                 decoration: Decoration.Bold
+        //             ),
+        //             FinishedStyle = new Style(foreground: Color.Gold1),
+        //             RemainingStyle = new Style(foreground: Color.Grey23),
+        //         },
+        //         new PercentageColumn()
+        //     )
+        //     .StartAsync(async ctx =>
+        //     {
+        //         var task = ctx.AddTask(
+        //             $"[{color}]Time Left: {timeLeft:mm\\:ss}[/]",
+        //             maxValue: duration.TotalSeconds
+        //         );
+
+        //         while (!ctx.IsFinished)
+        //         {
+        //             timeLeft -= TimeSpan.FromSeconds(1);
+        //             task.Description = $"[{color}]Time Left: {timeLeft:mm\\:ss}[/]";
+        //             task.Increment(1);
+        //             await Task.Delay(1000);
+        //         }
+        //     });
+    }
+
+    private static bool ContinueSession()
+    {
+        Console.Clear();
+
+        AnsiConsole.MarkupLine("[green]Completed![/]");
+
+        var userInput = AnsiConsole.Prompt(
+            new SelectionPrompt<string>()
+                .Title("Do you want to continue?")
+                .AddChoices("Continue", "Quit")
+        );
+
+        return userInput == "Continue";
     }
 }

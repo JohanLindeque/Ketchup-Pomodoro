@@ -15,6 +15,7 @@ public class Session
 
     public enum SessionType
     {
+        none,
         work,
         rest,
     }
